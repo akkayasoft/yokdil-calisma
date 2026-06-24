@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d9e75">
+<title>YÖKDİL Çalışma</title>
+<style>
+  :root{
+    --bg:#f6f7f5; --card:#ffffff; --ink:#1f2421; --muted:#6b726c;
+    --line:#e4e7e2; --brand:#1d9e75; --brand-dark:#0f6e56; --brand-soft:#e1f5ee;
+    --wrong:#e24b4a; --wrong-soft:#fceaea; --right:#1d9e75; --right-soft:#e1f5ee;
+    --amber:#ba7517; --amber-soft:#faeeda;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+    font-size:18px;line-height:1.6;-webkit-text-size-adjust:100%}
+  .wrap{max-width:760px;margin:0 auto;padding:16px 18px 110px}
+  header.top{position:sticky;top:0;background:var(--bg);padding:14px 18px 10px;z-index:20;
+    border-bottom:1px solid var(--line);max-width:760px;margin:0 auto}
+  header.top h1{font-size:20px;margin:0;font-weight:600;display:flex;align-items:center;gap:8px}
+  header.top .sub{font-size:13px;color:var(--muted);margin-top:2px}
+  .countdown{background:var(--brand-soft);color:var(--brand-dark);font-size:13px;font-weight:600;
+    padding:3px 10px;border-radius:20px;white-space:nowrap}
+  h2{font-size:18px;font-weight:600;margin:24px 0 12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+  .muted{color:var(--muted)}
+  .small{font-size:14px}
+  /* nav */
+  nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:30}
+  nav.tabs button{flex:1;background:none;border:none;color:var(--muted);font-size:11px;font-weight:600;
+    padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font-family:inherit}
+  nav.tabs button .ic{font-size:22px;line-height:1}
+  nav.tabs button.active{color:var(--brand)}
+  section{display:none;animation:fade .25s ease}
+  section.show{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  button.btn{background:var(--brand);color:#fff;border:none;border-radius:12px;padding:14px 20px;
+    font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;margin-top:6px}
+  button.btn.ghost{background:none;color:var(--brand-dark);border:1.5px solid var(--line)}
+  button.btn:active{transform:scale(.985)}
+  /* progress bar */
+  .pbar{height:10px;background:var(--line);border-radius:8px;overflow:hidden;margin:8px 0}
+  .pbar>span{display:block;height:100%;background:var(--brand);width:0;transition:width .4s}
+  .stat{display:flex;gap:10px;flex-wrap:wrap}
+  .stat .box{flex:1;min-width:90px;background:var(--brand-soft);border-radius:12px;padding:12px;text-align:center}
+  .stat .box b{display:block;font-size:24px;color:var(--brand-dark)}
+  .stat .box span{font-size:12px;color:var(--brand-dark)}
+  /* lesson list */
+  .lrow{display:flex;align-items:center;gap:14px;padding:16px;background:var(--card);
+    border:1px solid var(--line);border-radius:14px;margin-bottom:10px;cursor:pointer}
+  .lrow:active{background:var(--brand-soft)}
+  .lrow .em{font-size:26px}
+  .lrow .t{flex:1}
+  .lrow .t b{font-size:16px;font-weight:600}
+  .lrow .t span{font-size:13px;color:var(--muted);display:block}
+  .lrow .chev{color:var(--muted);font-size:20px}
+  /* flashcard */
+  .flash{perspective:1200px;margin:10px 0}
+  .flash .inner{position:relative;min-height:240px;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
+  .flash.flipped .inner{transform:rotateY(180deg)}
+  .flash .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;border:1px solid var(--line);
+    background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:24px;text-align:center}
+  .flash .back{transform:rotateY(180deg);background:var(--brand-soft);border-color:var(--brand-soft)}
+  .flash .face .word{font-size:34px;font-weight:700}
+  .flash .face .type{color:var(--muted);font-size:14px;margin-top:4px;font-style:italic}
+  .flash .face .tap{position:absolute;bottom:16px;font-size:12px;color:var(--muted)}
+  .flash .back .tr{font-size:26px;font-weight:700;color:var(--brand-dark)}
+  .flash .back .syn{font-size:14px;color:var(--brand-dark);margin-top:4px}
+  .flash .back .ex{font-size:15px;margin-top:14px;color:var(--ink)}
+  .flash .back .ext{font-size:13px;color:var(--muted);margin-top:4px}
+  .cardnav{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .cardnav button{flex:1;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:13px;
+    font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
+  .cardnav .know{color:var(--brand-dark);border-color:var(--brand)}
+  .cardnav .again{color:var(--amber);border-color:var(--amber)}
+  .counter{text-align:center;color:var(--muted);font-size:14px;margin:6px 0}
+  /* quiz */
+  .passage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;
+    font-size:17px;line-height:1.75}
+  .passage .hl{background:var(--brand-soft);border-radius:4px;padding:0 2px}
+  .qblock{margin-top:18px}
+  .qblock .qq{font-weight:600;margin-bottom:4px}
+  .qblock .qtag{font-size:12px;color:var(--brand-dark);background:var(--brand-soft);
+    padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:8px}
+  .opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);
+    border-radius:12px;padding:14px 16px;margin-bottom:9px;font-size:16px;font-family:inherit;cursor:pointer}
+  .opt:active{border-color:var(--brand)}
+  .opt.sel{border-color:var(--brand);background:var(--brand-soft)}
+  .opt.correct{border-color:var(--right);background:var(--right-soft)}
+  .opt.incorrect{border-color:var(--wrong);background:var(--wrong-soft)}
+  .opt .mk{float:right;font-weight:700}
+  .explain{font-size:14px;background:var(--amber-soft);border-radius:10px;padding:10px 12px;margin-top:2px;
+    display:none;color:#5a3a08}
+  .explain.show{display:block}
+  .glossbtn{font-size:14px;color:var(--brand-dark);background:none;border:none;font-family:inherit;
+    cursor:pointer;padding:8px 0;font-weight:600}
+  .gloss{display:none;margin-top:6px}
+  .gloss.show{display:block}
+  .gloss table{width:100%;border-collapse:collapse;font-size:15px}
+  .gloss td{padding:6px 4px;border-bottom:1px solid var(--line)}
+  .gloss td:first-child{font-weight:600;width:40%}
+  .gloss td:last-child{color:var(--muted)}
+  .scorebox{text-align:center;padding:20px;border-radius:16px;background:var(--brand-soft);margin-top:14px;display:none}
+  .scorebox.show{display:block}
+  .scorebox .big{font-size:40px;font-weight:700;color:var(--brand-dark)}
+  .backlink{background:none;border:none;color:var(--brand-dark);font-size:15px;font-weight:600;
+    font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:6px}
+  .tip{font-size:14px;background:var(--brand-soft);border-radius:12px;padding:12px 14px;color:var(--brand-dark)}
+  .done-badge{font-size:12px;color:#fff;background:var(--brand);padding:2px 9px;border-radius:10px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>📘 YÖKDİL Çalışma <span id="cd" class="countdown"></span></h1>
+  <div class="sub">Fen Bilimleri · 9 Ağustos 2026</div>
+</header>
+
+<div class="wrap">
+
+  <!-- HOME -->
+  <section id="home" class="show">
+    <div class="card">
+      <h2 style="margin-top:0">Genel ilerleme</h2>
+      <div class="stat">
+        <div class="box"><b id="s-words">0</b><span>kelime öğrenildi</span></div>
+        <div class="box"><b id="s-lessons">0</b><span>ders tamamlandı</span></div>
+        <div class="box"><b id="s-streak">0%</b><span>okuma başarısı</span></div>
+      </div>
+    </div>
+
+    <h2>Bugünün görevi</h2>
+    <div class="tip">⏱️ Günde 2 saat · Öncelik: <b>okuma + soru çözme</b>. Önce kelimeleri tekrar et, sonra okuma dersini çöz, yanlışlarını analiz et.</div>
+
+    <h2>Dersler</h2>
+    <div class="lrow" onclick="go('vocab')">
+      <div class="em">🗂️</div>
+      <div class="t"><b>Kelime kartları</b><span>15 akademik kelime · kart çevir, test et</span></div>
+      <div class="chev">›</div>
+    </div>
+    <div class="lrow" onclick="go('reading')">
+      <div class="em">📖</div>
+      <div class="t"><b>Okuma + soru çözme</b><span id="read-sub">Solar Energy · 5 soru</span></div>
+      <div class="chev">›</div>
+    </div>
+    <div class="lrow" onclick="go('plan')">
+      <div class="em">🗺️</div>
+      <div class="t"><b>Yol haritası</b><span>7 haftalık plan · strateji</span></div>
+      <div class="chev">›</div>
+    </div>
+  </section>
+
+  <!-- VOCAB -->
+  <section id="vocab">
+    <button class="backlink" onclick="go('home')">‹ Ana sayfa</button>
+    <h2 style="margin-top:4px">Kelime kartları</h2>
+    <div class="counter" id="v-counter"></div>
+    <div class="flash" id="flash" onclick="flip()">
+      <div class="inner">
+        <div class="face front">
+          <div class="word" id="v-word"></div>
+          <div class="type" id="v-type"></div>
+          <div class="tap">dokun → anlamı gör</div>
+        </div>
+        <div class="face back">
+          <div class="tr" id="v-tr"></div>
+          <div class="syn" id="v-syn"></div>
+          <div class="ex" id="v-ex"></div>
+          <div class="ext" id="v-ext"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cardnav">
+      <button class="again" onclick="event.stopPropagation();mark(false)">↻ Tekrar</button>
+      <button class="know" onclick="event.stopPropagation();mark(true)">✓ Biliyorum</button>
+    </div>
+    <button class="btn ghost" style="margin-top:14px" onclick="resetVocab()">Baştan başla</button>
+  </section>
+
+  <!-- READING -->
+  <section id="reading">
+    <button class="backlink" onclick="go('home')">‹ Ana sayfa</button>
+    <h2 style="margin-top:4px" id="r-title"></h2>
+    <div class="tip" style="margin-bottom:12px">💡 Önce soruları oku, sonra parçayı. Cevap her zaman metindedir. Şıkları eleyerek ilerle.</div>
+    <div class="passage" id="r-passage"></div>
+    <button class="glossbtn" onclick="toggleGloss()">📑 Sözlüğü göster / gizle</button>
+    <div class="gloss" id="r-gloss"><table id="r-gloss-t"></table></div>
+    <div id="r-questions"></div>
+    <button class="btn" id="r-submit" onclick="checkReading()">Cevapları kontrol et</button>
+    <div class="scorebox" id="r-score">
+      <div class="big" id="r-score-big"></div>
+      <div id="r-score-msg" class="muted"></div>
+      <button class="btn ghost" style="margin-top:12px" onclick="resetReading()">Tekrar çöz</button>
+    </div>
+  </section>
+
+  <!-- PLAN -->
+  <section id="plan">
+    <button class="backlink" onclick="go('home')">‹ Ana sayfa</button>
+    <h2 style="margin-top:4px">7 haftalık yol haritası</h2>
+    <div class="card"><b>Hafta 1-2</b> · Kelime motoru + temel gramer<br><span class="muted small">Her gün 15 kelime + bağlaçlar (however, despite...) + koşul cümleleri</span></div>
+    <div class="card"><b>Hafta 3-4</b> · Soru tipi tekniği<br><span class="muted small">Anlam bozan cümle, paragraf/diyalog tamamlama, cloze test</span></div>
+    <div class="card"><b>Hafta 5-6</b> · Restatement + okuma hızı<br><span class="muted small">Yakın anlam, çeviri, reading stratejisi, mini denemeler</span></div>
+    <div class="card"><b>Hafta 7</b> · Tam deneme + strateji<br><span class="muted small">Süreli denemeler, hata analizi, zaman yönetimi</span></div>
+    <div class="tip">🎯 Altın kural: YÖKDİL'de yanlış doğruyu götürmez. <b>Hiçbir soruyu boş bırakma.</b></div>
+  </section>
+
+</div>
+
+<nav class="tabs">
+  <button data-t="home" class="active" onclick="go('home')"><span class="ic">🏠</span>Ana sayfa</button>
+  <button data-t="vocab" onclick="go('vocab')"><span class="ic">🗂️</span>Kelime</button>
+  <button data-t="reading" onclick="go('reading')"><span class="ic">📖</span>Okuma</button>
+  <button data-t="plan" onclick="go('plan')"><span class="ic">🗺️</span>Plan</button>
+</nav>
+
+<script>
+/* ---------- DATA ---------- */
+const VOCAB = [
+  {w:"reluctant",t:"adj",tr:"isteksiz, gönülsüz",syn:"unwilling, hesitant",ex:"Many students are reluctant to speak in class.",ext:"Birçok öğrenci derste konuşmaya isteksiz."},
+  {w:"enhance",t:"verb",tr:"geliştirmek, artırmak",syn:"improve, boost",ex:"Exercise can enhance your memory.",ext:"Egzersiz hafızanı geliştirebilir."},
+  {w:"thorough",t:"adj",tr:"kapsamlı, titiz",syn:"comprehensive, detailed",ex:"The police did a thorough investigation.",ext:"Polis kapsamlı bir soruşturma yaptı."},
+  {w:"significant",t:"adj",tr:"önemli, kayda değer",syn:"important, considerable",ex:"There was a significant increase in prices.",ext:"Fiyatlarda kayda değer bir artış oldu."},
+  {w:"demonstrate",t:"verb",tr:"göstermek, kanıtlamak",syn:"show, prove",ex:"Studies demonstrate that sleep is important.",ext:"Çalışmalar uykunun önemli olduğunu gösteriyor."},
+  {w:"sufficient",t:"adj",tr:"yeterli",syn:"enough, adequate",ex:"We don't have sufficient data yet.",ext:"Henüz yeterli verimiz yok."},
+  {w:"occur",t:"verb",tr:"meydana gelmek, olmak",syn:"happen, take place",ex:"The accident occurred at night.",ext:"Kaza gece meydana geldi."},
+  {w:"consequence",t:"noun",tr:"sonuç",syn:"result, outcome",ex:"Every action has a consequence.",ext:"Her eylemin bir sonucu vardır."},
+  {w:"crucial",t:"adj",tr:"hayati, çok önemli",syn:"vital, essential",ex:"Water is crucial for life.",ext:"Su yaşam için hayatidir."},
+  {w:"considerable",t:"adj",tr:"hatırı sayılır, epey",syn:"substantial, large",ex:"A considerable number of people attended.",ext:"Hatırı sayılır sayıda insan katıldı."},
+  {w:"emerge",t:"verb",tr:"ortaya çıkmak, belirmek",syn:"appear, arise",ex:"New problems emerged during the project.",ext:"Proje sırasında yeni sorunlar ortaya çıktı."},
+  {w:"conduct",t:"verb",tr:"yürütmek, yapmak",syn:"carry out, perform",ex:"Scientists conducted an experiment.",ext:"Bilim insanları bir deney yürüttü."},
+  {w:"prior to",t:"prep",tr:"-den önce, önceki",syn:"previous, before",ex:"Prior to 1990, the city was small.",ext:"1990'dan önce şehir küçüktü."},
+  {w:"despite",t:"prep",tr:"-e rağmen",syn:"in spite of, regardless of",ex:"Despite the rain, we went out.",ext:"Yağmura rağmen dışarı çıktık."},
+  {w:"attribute to",t:"verb",tr:"-e bağlamak, atfetmek",syn:"ascribe, link to",ex:"They attribute the success to hard work.",ext:"Başarıyı sıkı çalışmaya bağlıyorlar."}
+];
+
+const READING = {
+  title:"Solar Energy",
+  passage:`Solar energy is one of the cleanest sources of power available today. Unlike coal or oil, it does not release harmful gases into the atmosphere. Sunlight is captured by panels made of special materials that convert light directly into electricity. Although the technology was once extremely expensive, the cost of solar panels has fallen by more than 80 percent over the past decade. As a result, many countries that were previously <span class="hl">reluctant</span> to invest in solar power are now building large solar farms. However, solar energy still faces one significant challenge: it cannot be produced at night or on cloudy days. Scientists are therefore working on better batteries to store the energy for later use. If this problem is solved, solar power could eventually become the world's main source of electricity.`,
+  gloss:[["source","kaynak"],["release","salmak"],["harmful","zararlı"],["capture","yakalamak, toplamak"],["convert","dönüştürmek"],["decade","on yıl"],["reluctant","isteksiz"],["invest","yatırım yapmak"],["challenge","zorluk, mesele"],["store","depolamak"],["eventually","sonunda"]],
+  questions:[
+    {tag:"Main idea",q:"What is the passage mainly about?",o:["The history of coal and oil","The advantages and one challenge of solar energy","How to build a solar panel at home","Why batteries are expensive"],a:1,
+     ex:"Parça hem avantajları hem bir zorluğu anlatıyor. a, c, d sadece küçük bir detaya odaklanıyor → ana fikir olamaz."},
+    {tag:"Detail",q:"Why are many countries now building solar farms?",o:["Because sunlight is free everywhere","Because solar panels have become much cheaper","Because coal is no longer available","Because batteries are now perfect"],a:1,
+     ex:'"the cost has fallen... As a result, many countries are now building solar farms." Sebep açıkça fiyat. Tuzak a: parçada "sunlight is free" denmiyor — kendi bilgini ekleme.'},
+    {tag:"Vocabulary",q:'The word "reluctant" is closest in meaning to:',o:["eager","unwilling","ready","able"],a:1,
+     ex:"reluctant = isteksiz = unwilling. Tuzak a (eager) ve c (ready): tam tersi anlam — en sık tuzak budur."},
+    {tag:"Detail",q:"What is the main problem with solar energy?",o:["It releases harmful gases","It is still very expensive","It cannot be produced at night or on cloudy days","It needs too much space"],a:2,
+     ex:'"it cannot be produced at night or on cloudy days" — doğrudan metinde. Tuzak b: maliyet artık düşmüş.'},
+    {tag:"Inference",q:"It can be inferred from the passage that:",o:["Solar power will never be useful","Better batteries could make solar power much more important","Coal is cleaner than solar energy","Solar panels work best at night"],a:1,
+     ex:'"If this problem is solved, solar power could eventually become the world\'s main source." Çıkarım: iyi bataryalar → solar daha önemli olur.'}
+  ]
+};
+
+/* ---------- STATE ---------- */
+const KEY="yokdil_progress_v1";
+let store=JSON.parse(localStorage.getItem(KEY)||"{}");
+if(!store.known) store.known=[];
+if(store.readingDone===undefined) store.readingDone=false;
+if(store.readingScore===undefined) store.readingScore=0;
+function save(){localStorage.setItem(KEY,JSON.stringify(store))}
+
+/* ---------- ROUTER ---------- */
+function go(id){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.t===id));
+  window.scrollTo(0,0);
+  if(id==='home') renderHome();
+  if(id==='vocab') renderCard();
+  if(id==='reading') renderReading();
+}
+
+/* ---------- COUNTDOWN ---------- */
+(function(){
+  const exam=new Date(2026,7,9);
+  const days=Math.ceil((exam-new Date())/(1000*60*60*24));
+  document.getElementById('cd').textContent=days>0?days+" gün kaldı":"sınav günü!";
+})();
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  document.getElementById('s-words').textContent=store.known.length;
+  let lessons=0; if(store.known.length>=VOCAB.length) lessons++; if(store.readingDone) lessons++;
+  document.getElementById('s-lessons').textContent=lessons;
+  document.getElementById('s-streak').textContent=store.readingDone?store.readingScore+"%":"—";
+  const pct=Math.round(store.known.length/VOCAB.length*100);
+  document.getElementById('read-sub').textContent="Solar Energy · 5 soru"+(store.readingDone?" ✓":"");
+}
+
+/* ---------- VOCAB ---------- */
+let vi=0, flipped=false;
+function renderCard(){
+  const c=VOCAB[vi];
+  document.getElementById('v-word').textContent=c.w;
+  document.getElementById('v-type').textContent=c.t;
+  document.getElementById('v-tr').textContent=c.tr;
+  document.getElementById('v-syn').textContent="≈ "+c.syn;
+  document.getElementById('v-ex').textContent='"'+c.ex+'"';
+  document.getElementById('v-ext').textContent=c.ext;
+  flipped=false; document.getElementById('flash').classList.remove('flipped');
+  const known=store.known.includes(vi);
+  document.getElementById('v-counter').innerHTML=(vi+1)+" / "+VOCAB.length+(known?'  <span class="done-badge">biliyorum</span>':'');
+}
+function flip(){flipped=!flipped;document.getElementById('flash').classList.toggle('flipped',flipped)}
+function mark(know){
+  const idx=store.known.indexOf(vi);
+  if(know && idx<0) store.known.push(vi);
+  if(!know && idx>=0) store.known.splice(idx,1);
+  save();
+  if(vi<VOCAB.length-1){vi++;renderCard();}
+  else{renderCard(); if(store.known.length>=VOCAB.length){setTimeout(()=>alert("🎉 Tüm kelimeleri 'biliyorum' olarak işaretledin! Yarın tekrar et."),200);} }
+}
+function resetVocab(){vi=0;renderCard()}
+
+/* ---------- READING ---------- */
+let answers={}, checked=false;
+function renderReading(){
+  document.getElementById('r-title').textContent=READING.title;
+  document.getElementById('r-passage').innerHTML=READING.passage;
+  const gt=document.getElementById('r-gloss-t');
+  gt.innerHTML=READING.gloss.map(g=>`<tr><td>${g[0]}</td><td>${g[1]}</td></tr>`).join('');
+  const qc=document.getElementById('r-questions');
+  qc.innerHTML=READING.questions.map((q,qi)=>`
+    <div class="qblock">
+      <span class="qtag">${q.tag}</span>
+      <div class="qq">${qi+1}. ${q.q}</div>
+      ${q.o.map((opt,oi)=>`<button class="opt" data-q="${qi}" data-o="${oi}" onclick="pick(${qi},${oi})">${String.fromCharCode(97+oi)}) ${opt}</button>`).join('')}
+      <div class="explain" id="ex-${qi}">${q.ex}</div>
+    </div>`).join('');
+  answers={}; checked=false;
+  document.getElementById('r-submit').style.display='block';
+  document.getElementById('r-score').classList.remove('show');
+}
+function pick(qi,oi){
+  if(checked) return;
+  answers[qi]=oi;
+  document.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(b=>b.classList.toggle('sel',+b.dataset.o===oi));
+}
+function checkReading(){
+  if(Object.keys(answers).length<READING.questions.length){
+    if(!confirm("Bazı sorular boş. Yine de kontrol edeyim mi?")) return;
+  }
+  checked=true; let correct=0;
+  READING.questions.forEach((q,qi)=>{
+    document.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(b=>{
+      const oi=+b.dataset.o; b.classList.remove('sel');
+      if(oi===q.a){b.classList.add('correct');b.querySelector('.mk')?.remove();b.insertAdjacentHTML('beforeend','<span class="mk">✓</span>');}
+      else if(answers[qi]===oi){b.classList.add('incorrect');b.insertAdjacentHTML('beforeend','<span class="mk">✗</span>');}
+    });
+    document.getElementById('ex-'+qi).classList.add('show');
+    if(answers[qi]===q.a) correct++;
+  });
+  const pct=Math.round(correct/READING.questions.length*100);
+  store.readingDone=true; store.readingScore=Math.max(store.readingScore,pct); save();
+  document.getElementById('r-submit').style.display='none';
+  const sb=document.getElementById('r-score'); sb.classList.add('show');
+  document.getElementById('r-score-big').textContent=correct+" / "+READING.questions.length;
+  const msg=pct>=80?"Harika! Okuma temelin sağlam.":pct>=50?"İyi yoldasın — tuzak şıklara dikkat.":"Sorun değil, tekniği birlikte oturtacağız.";
+  document.getElementById('r-score-msg').textContent=msg;
+  sb.scrollIntoView({behavior:'smooth'});
+}
+function resetReading(){renderReading();window.scrollTo(0,0)}
+function toggleGloss(){document.getElementById('r-gloss').classList.toggle('show')}
+
+renderHome();
+</script>
+</body>
+</html>
