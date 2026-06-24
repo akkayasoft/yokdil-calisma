@@ -11,7 +11,7 @@
     --bg:#f6f7f5; --card:#ffffff; --ink:#1f2421; --muted:#6b726c;
     --line:#e4e7e2; --brand:#1d9e75; --brand-dark:#0f6e56; --brand-soft:#e1f5ee;
     --wrong:#e24b4a; --wrong-soft:#fceaea; --right:#1d9e75; --right-soft:#e1f5ee;
-    --amber:#ba7517; --amber-soft:#faeeda;
+    --amber:#ba7517; --amber-soft:#faeeda; --lock:#9aa09a;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
@@ -28,7 +28,6 @@
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
   .muted{color:var(--muted)}
   .small{font-size:14px}
-  /* nav */
   nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);
     display:flex;justify-content:space-around;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:30}
   nav.tabs button{flex:1;background:none;border:none;color:var(--muted);font-size:11px;font-weight:600;
@@ -42,14 +41,10 @@
     font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;margin-top:6px}
   button.btn.ghost{background:none;color:var(--brand-dark);border:1.5px solid var(--line)}
   button.btn:active{transform:scale(.985)}
-  /* progress bar */
-  .pbar{height:10px;background:var(--line);border-radius:8px;overflow:hidden;margin:8px 0}
-  .pbar>span{display:block;height:100%;background:var(--brand);width:0;transition:width .4s}
   .stat{display:flex;gap:10px;flex-wrap:wrap}
-  .stat .box{flex:1;min-width:90px;background:var(--brand-soft);border-radius:12px;padding:12px;text-align:center}
-  .stat .box b{display:block;font-size:24px;color:var(--brand-dark)}
+  .stat .box{flex:1;min-width:84px;background:var(--brand-soft);border-radius:12px;padding:12px;text-align:center}
+  .stat .box b{display:block;font-size:23px;color:var(--brand-dark)}
   .stat .box span{font-size:12px;color:var(--brand-dark)}
-  /* lesson list */
   .lrow{display:flex;align-items:center;gap:14px;padding:16px;background:var(--card);
     border:1px solid var(--line);border-radius:14px;margin-bottom:10px;cursor:pointer}
   .lrow:active{background:var(--brand-soft)}
@@ -58,13 +53,11 @@
   .lrow .t b{font-size:16px;font-weight:600}
   .lrow .t span{font-size:13px;color:var(--muted);display:block}
   .lrow .chev{color:var(--muted);font-size:20px}
-  /* flashcard */
   .flash{perspective:1200px;margin:10px 0}
   .flash .inner{position:relative;min-height:240px;transition:transform .5s;transform-style:preserve-3d;cursor:pointer}
   .flash.flipped .inner{transform:rotateY(180deg)}
   .flash .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;border:1px solid var(--line);
-    background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:24px;text-align:center}
+    background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
   .flash .back{transform:rotateY(180deg);background:var(--brand-soft);border-color:var(--brand-soft)}
   .flash .face .word{font-size:34px;font-weight:700}
   .flash .face .type{color:var(--muted);font-size:14px;margin-top:4px;font-style:italic}
@@ -79,13 +72,60 @@
   .cardnav .know{color:var(--brand-dark);border-color:var(--brand)}
   .cardnav .again{color:var(--amber);border-color:var(--amber)}
   .counter{text-align:center;color:var(--muted);font-size:14px;margin:6px 0}
-  /* quiz */
-  .passage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;
-    font-size:17px;line-height:1.75}
+  .rpick{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .rpick button{flex:1;min-width:130px;border:1.5px solid var(--line);background:var(--card);border-radius:12px;
+    padding:11px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink)}
+  .rpick button.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-dark)}
+  .passage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;font-size:17px;line-height:1.75}
   .passage .hl{background:var(--brand-soft);border-radius:4px;padding:0 2px}
   .passage .w{cursor:pointer;border-radius:4px;padding:0 1px;transition:background .12s}
   .passage .w:active{background:var(--brand-soft)}
   .passage .w.tapped{background:var(--amber-soft);box-shadow:0 0 0 1px var(--amber)}
+  .qblock{margin-top:18px}
+  .qblock .qq{font-weight:600;margin-bottom:4px}
+  .qblock .qtag{font-size:12px;color:var(--brand-dark);background:var(--brand-soft);padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:8px}
+  .opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:9px;font-size:16px;font-family:inherit;cursor:pointer}
+  .opt:active{border-color:var(--brand)}
+  .opt.sel{border-color:var(--brand);background:var(--brand-soft)}
+  .opt.correct{border-color:var(--right);background:var(--right-soft)}
+  .opt.incorrect{border-color:var(--wrong);background:var(--wrong-soft)}
+  .opt .mk{float:right;font-weight:700}
+  .explain{font-size:14px;background:var(--amber-soft);border-radius:10px;padding:10px 12px;margin-top:2px;display:none;color:#5a3a08}
+  .explain.show{display:block}
+  .glossbtn{font-size:14px;color:var(--brand-dark);background:none;border:none;font-family:inherit;cursor:pointer;padding:8px 0;font-weight:600}
+  .gloss{display:none;margin-top:6px}
+  .gloss.show{display:block}
+  .gloss table{width:100%;border-collapse:collapse;font-size:15px}
+  .gloss td{padding:6px 4px;border-bottom:1px solid var(--line)}
+  .gloss td:first-child{font-weight:600;width:40%}
+  .gloss td:last-child{color:var(--muted)}
+  .scorebox{text-align:center;padding:20px;border-radius:16px;background:var(--brand-soft);margin-top:14px;display:none}
+  .scorebox.show{display:block}
+  .scorebox .big{font-size:40px;font-weight:700;color:var(--brand-dark)}
+  .backlink{background:none;border:none;color:var(--brand-dark);font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:6px}
+  .tip{font-size:14px;background:var(--brand-soft);border-radius:12px;padding:12px 14px;color:var(--brand-dark)}
+  .done-badge{font-size:12px;color:#fff;background:var(--brand);padding:2px 9px;border-radius:10px}
+  /* daily plan */
+  .dnow{background:var(--brand);color:#fff;border-radius:16px;padding:16px 18px;margin-bottom:14px}
+  .dnow b{font-size:22px;display:block}
+  .dnow span{font-size:13px;opacity:.9}
+  .day{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:12px}
+  .day.locked{opacity:.6}
+  .day.done{border-color:var(--brand)}
+  .day .dhead{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .day .dnum{font-size:16px;font-weight:700}
+  .day .dtheme{flex:1;font-size:14px;color:var(--muted)}
+  .day .dstatus{font-size:12px;font-weight:600;padding:2px 9px;border-radius:10px}
+  .day .dstatus.s-open{background:var(--amber-soft);color:var(--amber)}
+  .day .dstatus.s-done{background:var(--brand-soft);color:var(--brand-dark)}
+  .day .dstatus.s-lock{background:#eceeec;color:var(--lock)}
+  .task{display:flex;align-items:flex-start;gap:11px;padding:9px 0;cursor:pointer;font-size:15px;border-top:1px solid var(--line)}
+  .task:first-of-type{margin-top:8px}
+  .task .cb{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;margin-top:1px}
+  .task.checked .cb{background:var(--brand);border-color:var(--brand)}
+  .task.checked .tx{color:var(--muted);text-decoration:line-through}
+  .day.locked .task{cursor:not-allowed}
+  /* bottom sheet */
   .sheet-back{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;visibility:hidden;transition:.2s;z-index:50}
   .sheet-back.open{opacity:1;visibility:visible}
   .sheet{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-radius:22px 22px 0 0;
@@ -99,35 +139,6 @@
   .sheet .sent .lbl{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.03em}
   .sheet .sent .en{font-size:15px;margin-top:6px;font-style:italic;color:var(--ink)}
   .sheet .sent .tr2{font-size:17px;margin-top:6px;color:var(--brand-dark)}
-  .qblock{margin-top:18px}
-  .qblock .qq{font-weight:600;margin-bottom:4px}
-  .qblock .qtag{font-size:12px;color:var(--brand-dark);background:var(--brand-soft);
-    padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:8px}
-  .opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);
-    border-radius:12px;padding:14px 16px;margin-bottom:9px;font-size:16px;font-family:inherit;cursor:pointer}
-  .opt:active{border-color:var(--brand)}
-  .opt.sel{border-color:var(--brand);background:var(--brand-soft)}
-  .opt.correct{border-color:var(--right);background:var(--right-soft)}
-  .opt.incorrect{border-color:var(--wrong);background:var(--wrong-soft)}
-  .opt .mk{float:right;font-weight:700}
-  .explain{font-size:14px;background:var(--amber-soft);border-radius:10px;padding:10px 12px;margin-top:2px;
-    display:none;color:#5a3a08}
-  .explain.show{display:block}
-  .glossbtn{font-size:14px;color:var(--brand-dark);background:none;border:none;font-family:inherit;
-    cursor:pointer;padding:8px 0;font-weight:600}
-  .gloss{display:none;margin-top:6px}
-  .gloss.show{display:block}
-  .gloss table{width:100%;border-collapse:collapse;font-size:15px}
-  .gloss td{padding:6px 4px;border-bottom:1px solid var(--line)}
-  .gloss td:first-child{font-weight:600;width:40%}
-  .gloss td:last-child{color:var(--muted)}
-  .scorebox{text-align:center;padding:20px;border-radius:16px;background:var(--brand-soft);margin-top:14px;display:none}
-  .scorebox.show{display:block}
-  .scorebox .big{font-size:40px;font-weight:700;color:var(--brand-dark)}
-  .backlink{background:none;border:none;color:var(--brand-dark);font-size:15px;font-weight:600;
-    font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:6px}
-  .tip{font-size:14px;background:var(--brand-soft);border-radius:12px;padding:12px 14px;color:var(--brand-dark)}
-  .done-badge{font-size:12px;color:#fff;background:var(--brand);padding:2px 9px;border-radius:10px}
 </style>
 </head>
 <body>
@@ -145,13 +156,17 @@
       <h2 style="margin-top:0">Genel ilerleme</h2>
       <div class="stat">
         <div class="box"><b id="s-words">0</b><span>kelime öğrenildi</span></div>
-        <div class="box"><b id="s-lessons">0</b><span>ders tamamlandı</span></div>
-        <div class="box"><b id="s-streak">0%</b><span>okuma başarısı</span></div>
+        <div class="box"><b id="s-days">0</b><span>gün tamamlandı</span></div>
+        <div class="box"><b id="s-today">0 dk</b><span>bugün çalışma</span></div>
       </div>
+      <div class="small muted" style="margin-top:12px">⏱️ Toplam çalışma: <b id="s-total">0 dk</b> · Okuma ortalaması: <b id="s-read">—</b></div>
     </div>
 
-    <h2>Bugünün görevi</h2>
-    <div class="tip">⏱️ Günde 2 saat · Öncelik: <b>okuma + soru çözme</b>. Önce kelimeleri tekrar et, sonra okuma dersini çöz, yanlışlarını analiz et.</div>
+    <div class="dnow" id="dnow" onclick="go('plan')">
+      <span>Şu anki görevin</span>
+      <b id="dnow-day">Gün 1</b>
+      <span id="dnow-theme"></span>
+    </div>
 
     <h2>Dersler</h2>
     <div class="lrow" onclick="go('vocab')">
@@ -161,12 +176,12 @@
     </div>
     <div class="lrow" onclick="go('reading')">
       <div class="em">📖</div>
-      <div class="t"><b>Okuma + soru çözme</b><span id="read-sub">Solar Energy · 5 soru</span></div>
+      <div class="t"><b>Okuma + soru çözme</b><span id="read-sub">2 parça · dokun-çevir</span></div>
       <div class="chev">›</div>
     </div>
     <div class="lrow" onclick="go('plan')">
-      <div class="em">🗺️</div>
-      <div class="t"><b>Yol haritası</b><span>7 haftalık plan · strateji</span></div>
+      <div class="em">📅</div>
+      <div class="t"><b>Günlük plan</b><span>gün gün görevler · kilit sistemi</span></div>
       <div class="chev">›</div>
     </div>
   </section>
@@ -201,7 +216,8 @@
   <!-- READING -->
   <section id="reading">
     <button class="backlink" onclick="go('home')">‹ Ana sayfa</button>
-    <h2 style="margin-top:4px" id="r-title"></h2>
+    <div class="rpick" id="r-pick"></div>
+    <h2 style="margin-top:0" id="r-title"></h2>
     <div class="tip" style="margin-bottom:12px">👆 <b>Parçadaki kelimeye dokun</b> → Türkçesi + o cümlenin çevirisi açılır.<br>💡 Önce soruları oku, cevabı metinde ara, şıkları eleyerek ilerle.</div>
     <div class="passage" id="r-passage"></div>
     <button class="glossbtn" onclick="toggleGloss()">📑 Sözlüğü göster / gizle</button>
@@ -218,12 +234,14 @@
   <!-- PLAN -->
   <section id="plan">
     <button class="backlink" onclick="go('home')">‹ Ana sayfa</button>
-    <h2 style="margin-top:4px">7 haftalık yol haritası</h2>
-    <div class="card"><b>Hafta 1-2</b> · Kelime motoru + temel gramer<br><span class="muted small">Her gün 15 kelime + bağlaçlar (however, despite...) + koşul cümleleri</span></div>
-    <div class="card"><b>Hafta 3-4</b> · Soru tipi tekniği<br><span class="muted small">Anlam bozan cümle, paragraf/diyalog tamamlama, cloze test</span></div>
-    <div class="card"><b>Hafta 5-6</b> · Restatement + okuma hızı<br><span class="muted small">Yakın anlam, çeviri, reading stratejisi, mini denemeler</span></div>
-    <div class="card"><b>Hafta 7</b> · Tam deneme + strateji<br><span class="muted small">Süreli denemeler, hata analizi, zaman yönetimi</span></div>
-    <div class="tip">🎯 Altın kural: YÖKDİL'de yanlış doğruyu götürmez. <b>Hiçbir soruyu boş bırakma.</b></div>
+    <h2 style="margin-top:4px">Günlük plan</h2>
+    <div class="tip" style="margin-bottom:14px">🔒 Görevleri yaptıkça kutucukları işaretle. Bir günün <b>tüm görevleri</b> bitmeden ertesi gün açılmaz.</div>
+    <div id="plan-list"></div>
+    <h2>Haftalık genel bakış</h2>
+    <div class="card small"><b>Hafta 1-2</b> · Kelime motoru + temel gramer<br><span class="muted">15'erli kelime + bağlaçlar + koşul cümleleri</span></div>
+    <div class="card small"><b>Hafta 3-4</b> · Soru tipi tekniği<br><span class="muted">Anlam bozan cümle, paragraf/diyalog tamamlama, cloze</span></div>
+    <div class="card small"><b>Hafta 5-6</b> · Restatement + okuma hızı<br><span class="muted">Yakın anlam, çeviri, mini denemeler</span></div>
+    <div class="card small"><b>Hafta 7</b> · Tam deneme + strateji<br><span class="muted">Süreli denemeler, hata analizi, zaman yönetimi</span></div>
   </section>
 
 </div>
@@ -232,7 +250,7 @@
   <button data-t="home" class="active" onclick="go('home')"><span class="ic">🏠</span>Ana sayfa</button>
   <button data-t="vocab" onclick="go('vocab')"><span class="ic">🗂️</span>Kelime</button>
   <button data-t="reading" onclick="go('reading')"><span class="ic">📖</span>Okuma</button>
-  <button data-t="plan" onclick="go('plan')"><span class="ic">🗺️</span>Plan</button>
+  <button data-t="plan" onclick="go('plan')"><span class="ic">📅</span>Plan</button>
 </nav>
 
 <div class="sheet-back" id="sheet-back" onclick="closeSheet()"></div>
@@ -249,7 +267,7 @@
 </div>
 
 <script>
-/* ---------- DATA ---------- */
+/* ================= DATA ================= */
 const VOCAB = [
   {w:"reluctant",t:"adj",tr:"isteksiz, gönülsüz",syn:"unwilling, hesitant",ex:"Many students are reluctant to speak in class.",ext:"Birçok öğrenci derste konuşmaya isteksiz."},
   {w:"enhance",t:"verb",tr:"geliştirmek, artırmak",syn:"improve, boost",ex:"Exercise can enhance your memory.",ext:"Egzersiz hafızanı geliştirebilir."},
@@ -268,7 +286,8 @@ const VOCAB = [
   {w:"attribute to",t:"verb",tr:"-e bağlamak, atfetmek",syn:"ascribe, link to",ex:"They attribute the success to hard work.",ext:"Başarıyı sıkı çalışmaya bağlıyorlar."}
 ];
 
-const READING = {
+const READINGS = [
+{
   title:"Solar Energy",
   sentences:[
     {en:"Solar energy is one of the cleanest sources of power available today.",tr:"Güneş enerjisi, bugün mevcut olan en temiz güç kaynaklarından biridir."},
@@ -294,17 +313,105 @@ const READING = {
     {tag:"Inference",q:"It can be inferred from the passage that:",o:["Solar power will never be useful","Better batteries could make solar power much more important","Coal is cleaner than solar energy","Solar panels work best at night"],a:1,
      ex:'"If this problem is solved, solar power could eventually become the world\'s main source." Çıkarım: iyi bataryalar → solar daha önemli olur.'}
   ]
-};
+},
+{
+  title:"Electric Cars",
+  sentences:[
+    {en:"Electric cars are becoming more popular all over the world.",tr:"Elektrikli arabalar tüm dünyada giderek daha popüler hale geliyor."},
+    {en:"Unlike traditional cars, they run on electricity instead of petrol.",tr:"Geleneksel arabaların aksine, benzin yerine elektrikle çalışırlar."},
+    {en:"Because they do not burn fuel, they produce no exhaust gases while driving.",tr:"Yakıt yakmadıkları için, sürüş sırasında hiç egzoz gazı üretmezler."},
+    {en:"This makes them much cleaner for the environment, especially in crowded cities.",tr:"Bu, onları çevre için, özellikle kalabalık şehirlerde, çok daha temiz yapar."},
+    {en:"However, electric cars also have some disadvantages.",tr:"Ancak, elektrikli arabaların bazı dezavantajları da vardır."},
+    {en:"Their batteries can take several hours to charge, and they cannot travel as far as petrol cars on a single charge.",tr:"Bataryalarının şarj olması birkaç saat sürebilir ve tek şarjla benzinli arabalar kadar uzağa gidemezler."},
+    {en:"In addition, the electricity used to charge them is sometimes produced by burning coal.",tr:"Ayrıca, onları şarj etmek için kullanılan elektrik bazen kömür yakılarak üretilir."},
+    {en:"Despite these problems, many experts believe that electric cars are the future of transport.",tr:"Bu sorunlara rağmen, birçok uzman elektrikli arabaların ulaşımın geleceği olduğuna inanıyor."}
+  ],
+  dict:{"electric":"elektrikli","cars":"arabalar","car":"araba","are":"-dirler","becoming":"hale gelmek","more":"daha","popular":"popüler, rağbet gören","all":"tüm, bütün","over":"her yerinde, boyunca","the":"(tanım edatı)","world":"dünya","unlike":"-in aksine","traditional":"geleneksel","they":"onlar","run":"çalışmak","on":"ile, -de","electricity":"elektrik","instead":"yerine","of":"-in","petrol":"benzin","because":"çünkü, -dığı için","do":"(yardımcı fiil)","not":"değil","burn":"yakmak","fuel":"yakıt","produce":"üretmek","no":"hiç, hiçbir","exhaust":"egzoz","gases":"gazlar","gas":"gaz","while":"-iken, esnasında","driving":"sürüş, araba kullanma","this":"bu","makes":"yapar","make":"yapmak","them":"onları","much":"çok","cleaner":"daha temiz","for":"için","environment":"çevre","especially":"özellikle","in":"-de, içinde","crowded":"kalabalık","cities":"şehirler","city":"şehir","however":"ancak","also":"ayrıca, -de da","have":"sahip olmak, var","some":"bazı","disadvantages":"dezavantajlar, olumsuz yönler","disadvantage":"dezavantaj","their":"onların","batteries":"bataryalar, piller","battery":"batarya","can":"-ebilir","take":"almak, (zaman) sürmek","several":"birkaç","hours":"saatler","hour":"saat","to":"-e, -mek için","charge":"şarj etmek","and":"ve","cannot":"-emez","travel":"gitmek, seyahat etmek","as":"kadar","far":"uzak, uzağa","petrol cars":"benzinli arabalar","single":"tek","addition":"ek, ilave","used":"kullanılan","sometimes":"bazen","produced":"üretilir","by":"ile, tarafından","burning":"yakarak","coal":"kömür","despite":"-e rağmen","these":"bu, bunlar","problems":"sorunlar","problem":"sorun","many":"birçok","experts":"uzmanlar","expert":"uzman","believe":"inanmak","that":"ki","future":"gelecek","transport":"ulaşım, taşımacılık","is":"-dir","one":"bir, biri"},
+  gloss:[["traditional","geleneksel"],["fuel","yakıt"],["exhaust gases","egzoz gazları"],["environment","çevre"],["crowded","kalabalık"],["disadvantages","dezavantajlar"],["charge","şarj etmek"],["travel","gitmek"],["experts","uzmanlar"],["transport","ulaşım"]],
+  questions:[
+    {tag:"Main idea",q:"What is the passage mainly about?",o:["How to drive an electric car","The advantages and disadvantages of electric cars","Why petrol is cheap","The history of the car"],a:1,
+     ex:"Parça hem avantajları (temiz, egzozsuz) hem dezavantajları (şarj, menzil) anlatıyor → ana fikir bu."},
+    {tag:"Detail",q:"Why are electric cars cleaner while driving?",o:["Because they are smaller","Because they do not produce exhaust gases","Because they use coal","Because they travel slowly"],a:1,
+     ex:'"they produce no exhaust gases while driving" — doğrudan metinde.'},
+    {tag:"Vocabulary",q:'The word "disadvantages" is closest in meaning to:',o:["benefits","drawbacks","prices","designs"],a:1,
+     ex:"disadvantage = dezavantaj = drawback (olumsuz yön). Tuzak a (benefits): tam tersi."},
+    {tag:"Detail",q:"What is ONE disadvantage mentioned in the passage?",o:["They are too fast","Their batteries take a long time to charge","They release exhaust gases","They are very cheap"],a:1,
+     ex:'"Their batteries can take several hours to charge" — metinde açıkça geçiyor.'},
+    {tag:"Inference",q:"It can be inferred from the passage that electric cars:",o:["are completely free of environmental problems","are not yet perfect for the environment","are slower than all other cars","will soon be banned"],a:1,
+     ex:'Şarj elektriği "sometimes produced by burning coal" → tamamen çevre dostu değiller. Çıkarım b.'}
+  ]
+}
+];
 
-/* ---------- STATE ---------- */
-const KEY="yokdil_progress_v1";
+const DAYS = [
+  {theme:"Başlangıç: kelime + ilk okuma", tasks:[
+    "15 akademik kelimeyi kartlarla çalış (Kelime sekmesi)",
+    "Solar Energy parçasını oku — bilmediğin kelimelere dokun",
+    "Solar Energy 5 soruyu çöz",
+    "Yanlışlarının açıklamalarını oku"]},
+  {theme:"İkinci okuma + kelime tekrarı", tasks:[
+    "15 kelimeyi tekrar et (kart)",
+    "Electric Cars parçasını oku (dokun-çevir kullan)",
+    "Electric Cars 5 soruyu çöz",
+    "İki parçada gördüğün yeni kelimeleri bir deftere yaz"]},
+  {theme:"Pekiştirme + okuma hızı", tasks:[
+    "Zorlandığın kelimeleri tekrar et",
+    "Solar Energy'yi tekrar oku — bu sefer mümkün olduğunca dokunmadan",
+    "Solar quiz'i tekrar çöz, hedef 4-5 / 5",
+    "Parçayı 3 dakikadan kısa sürede okumayı dene"]},
+  {theme:"Pekiştirme 2", tasks:[
+    "15 kelimeyi karışık sırada test et (kapalı dene)",
+    "Electric Cars'ı tekrar oku, dokunmadan anlamaya çalış",
+    "Electric Cars quiz'i tekrar çöz, hedef 4-5 / 5",
+    "Her iki parçanın ana fikrini Türkçe birer cümleyle özetle"]},
+  {theme:"Soru tekniği günü", tasks:[
+    "Tüm kelimeleri hızlı tekrar et (kart)",
+    "Her iki okuma quizini de art arda çöz",
+    "Yanlış yaptığın her soruda 'neden tuzak' açıklamasını tekrar oku",
+    "Hangi soru tipinde (main idea / detail / vocab / inference) daha çok yanlış yaptığını not et"]},
+  {theme:"Hafta değerlendirmesi", tasks:[
+    "15 kelimenin hepsini bildiğinden emin ol (kart)",
+    "En düşük puan aldığın okumayı tekrar çöz",
+    "Bu hafta toplam kaç dakika çalıştığına bak (Ana sayfa)",
+    "Claude'a haftalık sonucunu bildir: puanların + en çok zorlandığın soru tipi"]}
+];
+
+/* ================= STATE ================= */
+const KEY="yokdil_progress_v2";
 let store=JSON.parse(localStorage.getItem(KEY)||"{}");
-if(!store.known) store.known=[];
-if(store.readingDone===undefined) store.readingDone=false;
-if(store.readingScore===undefined) store.readingScore=0;
+store.known=store.known||[];
+store.readingScores=store.readingScores||{};
+store.time=store.time||{};
+store.dayDone=store.dayDone||[];
+store.dayTasks=store.dayTasks||{};
 function save(){localStorage.setItem(KEY,JSON.stringify(store))}
+function todayKey(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function fmt(sec){sec=Math.round(sec);const m=Math.round(sec/60);if(m<60)return m+" dk";const h=Math.floor(m/60);return h+" sa "+(m%60)+" dk"}
 
-/* ---------- ROUTER ---------- */
+/* ================= TIME TRACKING ================= */
+let lastTick=Date.now();
+function tick(){
+  const now=Date.now();
+  if(document.visibilityState==="visible"){
+    const inc=Math.min((now-lastTick)/1000,12);
+    const k=todayKey();
+    store.time[k]=(store.time[k]||0)+inc;
+    save();
+    if(document.getElementById('home').classList.contains('show')) updateTime();
+  }
+  lastTick=now;
+}
+setInterval(tick,5000);
+document.addEventListener("visibilitychange",()=>{lastTick=Date.now();});
+window.addEventListener("beforeunload",tick);
+function updateTime(){
+  document.getElementById('s-today').textContent=fmt(store.time[todayKey()]||0);
+  let total=0;for(const k in store.time)total+=store.time[k];
+  document.getElementById('s-total').textContent=fmt(total);
+}
+
+/* ================= ROUTER ================= */
+let currentReading=0;
 function go(id){
   document.querySelectorAll('section').forEach(s=>s.classList.remove('show'));
   document.getElementById(id).classList.add('show');
@@ -313,26 +420,31 @@ function go(id){
   if(id==='home') renderHome();
   if(id==='vocab') renderCard();
   if(id==='reading') renderReading();
+  if(id==='plan') renderPlan();
 }
 
-/* ---------- COUNTDOWN ---------- */
+/* ================= COUNTDOWN ================= */
 (function(){
   const exam=new Date(2026,7,9);
   const days=Math.ceil((exam-new Date())/(1000*60*60*24));
   document.getElementById('cd').textContent=days>0?days+" gün kaldı":"sınav günü!";
 })();
 
-/* ---------- HOME ---------- */
+/* ================= HOME ================= */
+function curDay(){let d=1;while(store.dayDone.includes(d))d++;return Math.min(d,DAYS.length)}
 function renderHome(){
   document.getElementById('s-words').textContent=store.known.length;
-  let lessons=0; if(store.known.length>=VOCAB.length) lessons++; if(store.readingDone) lessons++;
-  document.getElementById('s-lessons').textContent=lessons;
-  document.getElementById('s-streak').textContent=store.readingDone?store.readingScore+"%":"—";
-  const pct=Math.round(store.known.length/VOCAB.length*100);
-  document.getElementById('read-sub').textContent="Solar Energy · 5 soru"+(store.readingDone?" ✓":"");
+  document.getElementById('s-days').textContent=store.dayDone.length;
+  updateTime();
+  const sc=Object.values(store.readingScores);
+  document.getElementById('s-read').textContent=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length)+"%":"—";
+  const cd=curDay();
+  document.getElementById('dnow-day').textContent="Gün "+cd;
+  document.getElementById('dnow-theme').textContent=DAYS[cd-1].theme;
+  document.getElementById('read-sub').textContent=READINGS.length+" parça · dokun-çevir";
 }
 
-/* ---------- VOCAB ---------- */
+/* ================= VOCAB ================= */
 let vi=0, flipped=false;
 function renderCard(){
   const c=VOCAB[vi];
@@ -353,19 +465,21 @@ function mark(know){
   if(!know && idx>=0) store.known.splice(idx,1);
   save();
   if(vi<VOCAB.length-1){vi++;renderCard();}
-  else{renderCard(); if(store.known.length>=VOCAB.length){setTimeout(()=>alert("🎉 Tüm kelimeleri 'biliyorum' olarak işaretledin! Yarın tekrar et."),200);} }
+  else{renderCard(); if(store.known.length>=VOCAB.length) setTimeout(()=>alert("🎉 Tüm kelimeleri 'biliyorum' olarak işaretledin!"),200);}
 }
 function resetVocab(){vi=0;renderCard()}
 
-/* ---------- READING ---------- */
+/* ================= READING ================= */
 let answers={}, checked=false;
+function R(){return READINGS[currentReading]}
+function loadReading(i){currentReading=i;go('reading')}
 function buildPassage(){
-  return READING.sentences.map((s,si)=>{
+  const d=R().dict;
+  return R().sentences.map((s,si)=>{
     return s.en.split(/([A-Za-z']+)/).map(p=>{
       if(/^[A-Za-z']+$/.test(p)){
         const key=p.toLowerCase().replace(/[^a-z']/g,'');
-        let tr=READING.dict[key];
-        if(!tr && key.endsWith('s')) tr=READING.dict[key.slice(0,-1)];
+        let tr=d[key]; if(!tr && key.endsWith('s')) tr=d[key.slice(0,-1)];
         const hl=(key==='reluctant')?' hl':'';
         return '<span class="w'+hl+'" data-w="'+p+'" data-tr="'+(tr?tr.replace(/"/g,'&quot;'):'')+'" data-s="'+si+'" onclick="wordTap(this)">'+p+'</span>';
       }
@@ -379,8 +493,8 @@ function wordTap(el){
   const s=+el.dataset.s, tr=el.dataset.tr;
   document.getElementById('sheet-w').textContent=el.dataset.w;
   document.getElementById('sheet-tr').textContent=tr?('→ '+tr):'(bu kelime için ayrı sözlük girişi yok — cümle çevirisine bak)';
-  document.getElementById('sheet-en').textContent=READING.sentences[s].en;
-  document.getElementById('sheet-sentr').textContent=READING.sentences[s].tr;
+  document.getElementById('sheet-en').textContent=R().sentences[s].en;
+  document.getElementById('sheet-sentr').textContent=R().sentences[s].tr;
   document.getElementById('sheet').classList.add('open');
   document.getElementById('sheet-back').classList.add('open');
 }
@@ -390,12 +504,14 @@ function closeSheet(){
   if(window._lastW){window._lastW.classList.remove('tapped');window._lastW=null;}
 }
 function renderReading(){
-  document.getElementById('r-title').textContent=READING.title;
+  const pk=document.getElementById('r-pick');
+  pk.innerHTML=READINGS.map((r,i)=>'<button class="'+(i===currentReading?'on':'')+'" onclick="loadReading('+i+')">'+(i+1)+'. '+r.title+(store.readingScores[i]!=null?' ✓':'')+'</button>').join('');
+  document.getElementById('r-title').textContent=R().title;
   document.getElementById('r-passage').innerHTML=buildPassage();
   const gt=document.getElementById('r-gloss-t');
-  gt.innerHTML=READING.gloss.map(g=>`<tr><td>${g[0]}</td><td>${g[1]}</td></tr>`).join('');
+  gt.innerHTML=R().gloss.map(g=>`<tr><td>${g[0]}</td><td>${g[1]}</td></tr>`).join('');
   const qc=document.getElementById('r-questions');
-  qc.innerHTML=READING.questions.map((q,qi)=>`
+  qc.innerHTML=R().questions.map((q,qi)=>`
     <div class="qblock">
       <span class="qtag">${q.tag}</span>
       <div class="qq">${qi+1}. ${q.q}</div>
@@ -403,6 +519,7 @@ function renderReading(){
       <div class="explain" id="ex-${qi}">${q.ex}</div>
     </div>`).join('');
   answers={}; checked=false;
+  document.getElementById('r-gloss').classList.remove('show');
   document.getElementById('r-submit').style.display='block';
   document.getElementById('r-score').classList.remove('show');
 }
@@ -412,30 +529,60 @@ function pick(qi,oi){
   document.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(b=>b.classList.toggle('sel',+b.dataset.o===oi));
 }
 function checkReading(){
-  if(Object.keys(answers).length<READING.questions.length){
-    if(!confirm("Bazı sorular boş. Yine de kontrol edeyim mi?")) return;
-  }
+  if(Object.keys(answers).length<R().questions.length){ if(!confirm("Bazı sorular boş. Yine de kontrol edeyim mi?")) return; }
   checked=true; let correct=0;
-  READING.questions.forEach((q,qi)=>{
+  R().questions.forEach((q,qi)=>{
     document.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(b=>{
       const oi=+b.dataset.o; b.classList.remove('sel');
-      if(oi===q.a){b.classList.add('correct');b.querySelector('.mk')?.remove();b.insertAdjacentHTML('beforeend','<span class="mk">✓</span>');}
+      if(oi===q.a){b.classList.add('correct');b.insertAdjacentHTML('beforeend','<span class="mk">✓</span>');}
       else if(answers[qi]===oi){b.classList.add('incorrect');b.insertAdjacentHTML('beforeend','<span class="mk">✗</span>');}
     });
     document.getElementById('ex-'+qi).classList.add('show');
     if(answers[qi]===q.a) correct++;
   });
-  const pct=Math.round(correct/READING.questions.length*100);
-  store.readingDone=true; store.readingScore=Math.max(store.readingScore,pct); save();
+  const pct=Math.round(correct/R().questions.length*100);
+  store.readingScores[currentReading]=Math.max(store.readingScores[currentReading]||0,pct); save();
   document.getElementById('r-submit').style.display='none';
   const sb=document.getElementById('r-score'); sb.classList.add('show');
-  document.getElementById('r-score-big').textContent=correct+" / "+READING.questions.length;
-  const msg=pct>=80?"Harika! Okuma temelin sağlam.":pct>=50?"İyi yoldasın — tuzak şıklara dikkat.":"Sorun değil, tekniği birlikte oturtacağız.";
-  document.getElementById('r-score-msg').textContent=msg;
+  document.getElementById('r-score-big').textContent=correct+" / "+R().questions.length;
+  document.getElementById('r-score-msg').textContent=pct>=80?"Harika! Okuma temelin sağlam.":pct>=50?"İyi yoldasın — tuzak şıklara dikkat.":"Sorun değil, tekniği birlikte oturtacağız.";
   sb.scrollIntoView({behavior:'smooth'});
 }
 function resetReading(){renderReading();window.scrollTo(0,0)}
 function toggleGloss(){document.getElementById('r-gloss').classList.toggle('show')}
+
+/* ================= DAILY PLAN ================= */
+function dayUnlocked(n){return n===1 || store.dayDone.includes(n-1)}
+function renderPlan(){
+  const list=document.getElementById('plan-list');
+  list.innerHTML=DAYS.map((day,di)=>{
+    const n=di+1, unlocked=dayUnlocked(n), done=store.dayDone.includes(n);
+    const ts=store.dayTasks[n]||[];
+    let status='', cls='';
+    if(done){status='<span class="dstatus s-done">✓ tamam</span>';cls=' done';}
+    else if(unlocked){status='<span class="dstatus s-open">açık</span>';}
+    else{status='<span class="dstatus s-lock">🔒 kilitli</span>';cls=' locked';}
+    const tasks=day.tasks.map((t,ti)=>{
+      const ck=ts[ti]?' checked':'';
+      const onclick=unlocked?`onclick="toggleTask(${n},${ti})"`:'';
+      return `<div class="task${ck}" ${onclick}><div class="cb">${ts[ti]?'✓':''}</div><div class="tx">${t}</div></div>`;
+    }).join('');
+    return `<div class="day${cls}">
+      <div class="dhead"><span class="dnum">Gün ${n}</span><span class="dtheme">${day.theme}</span>${status}</div>
+      ${unlocked?tasks:'<div class="muted small" style="padding:8px 0">Önceki günü tamamlayınca açılır.</div>'}
+    </div>`;
+  }).join('');
+}
+function toggleTask(n,ti){
+  if(!dayUnlocked(n)) return;
+  store.dayTasks[n]=store.dayTasks[n]||[];
+  store.dayTasks[n][ti]=!store.dayTasks[n][ti];
+  const all=DAYS[n-1].tasks.every((_,i)=>store.dayTasks[n][i]);
+  const was=store.dayDone.includes(n);
+  if(all && !was){store.dayDone.push(n); setTimeout(()=>alert("🎉 Gün "+n+" tamam! Gün "+(n+1<=DAYS.length?n+1:n)+" açıldı."),150);}
+  if(!all && was){store.dayDone=store.dayDone.filter(x=>x!==n);}
+  save(); renderPlan();
+}
 
 renderHome();
 </script>
