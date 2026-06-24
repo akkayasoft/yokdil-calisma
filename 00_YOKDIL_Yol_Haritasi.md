@@ -60,17 +60,25 @@ asla boş bırakmayız, akıllı eleme yaparız.
 - Cloze test + cümle tamamlama
 - Kelime listelerine devam (toplam hedef ~500+ kelime)
 
-### Hafta 5-6 (20 Tem – 2 Ağu) — Restatement + okuma hızlandırma
+### Hafta 5 (20 Tem – 26 Tem) — Restatement + okuma hızlandırma
 - Yakın anlam (restatement) tekniği + eş anlamlı kelime yoğunluğu
 - Çeviri (EN↔TR) mantığı
 - Reading comprehension stratejisi (soruyu önce oku, tara)
-- Bölüm bölüm mini-denemeler
 
-### Hafta 7 (3 Ağu – 8 Ağu) — Tam deneme + strateji
-- 2-3 tam deneme, süre tutarak (180 dk)
-- Hata analizi, zaman yönetimi, eleme tekniği
+### Hafta 6 (27 Tem – 2 Ağu) — Bölüm denemeleri (mini-mock)
+- Her gün bir bölüm denemesi (sadece okuma / sadece cloze / sadece restatement...)
+- Zayıf bölümleri tek tek kapatma
+- Kelime tekrarının korunması
+
+### Hafta 7 (3 Ağu – 8 Ağu) — DENEME SINAVLARI (tam mock)
+- **Süreli, tam denemeler (80 soru / 180 dk)** — gerçek sınav koşulları
+- Her denemeden sonra ayrıntılı **hata analizi** (en yüksek getirili aktivite)
+- Zaman yönetimi, eleme tekniği, dayanıklılık antrenmanı
 - **Altın kural:** hiçbir soruyu boş bırakma (yanlış puan götürmez)
-- Sınav öncesi son gün: hafif tekrar, dinlenme
+- **Son 1-2 gün:** ağır deneme YOK — hafif tekrar + dinlenme (sınava dinç gir)
+
+> Resmi/yayınlanmış YÖKDİL çıkmış sorularını (ÖSYM arşivi + deneme kitapları)
+> son 2 haftada mutlaka kullan — gerçek sınav materyali, simülasyon için en iyisidir.
 
 ---
 
