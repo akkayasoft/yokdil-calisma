@@ -384,6 +384,7 @@ store.readingScores=store.readingScores||{};
 store.time=store.time||{};
 store.dayDone=store.dayDone||[];
 store.dayTasks=store.dayTasks||{};
+store.dayDoneDate=store.dayDoneDate||{};
 function save(){localStorage.setItem(KEY,JSON.stringify(store))}
 function todayKey(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function fmt(sec){sec=Math.round(sec);const m=Math.round(sec/60);if(m<60)return m+" dk";const h=Math.floor(m/60);return h+" sa "+(m%60)+" dk"}
@@ -440,7 +441,7 @@ function renderHome(){
   document.getElementById('s-read').textContent=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length)+"%":"—";
   const cd=curDay();
   document.getElementById('dnow-day').textContent="Gün "+cd;
-  document.getElementById('dnow-theme').textContent=DAYS[cd-1].theme;
+  document.getElementById('dnow-theme').textContent=dayUnlocked(cd)?DAYS[cd-1].theme:"Bugünlük tamam ✓ — bu gün yarın açılacak";
   document.getElementById('read-sub').textContent=READINGS.length+" parça · dokun-çevir";
 }
 
@@ -552,15 +553,21 @@ function resetReading(){renderReading();window.scrollTo(0,0)}
 function toggleGloss(){document.getElementById('r-gloss').classList.toggle('show')}
 
 /* ================= DAILY PLAN ================= */
-function dayUnlocked(n){return n===1 || store.dayDone.includes(n-1)}
+function dayUnlocked(n){
+  if(n===1) return true;
+  if(!store.dayDone.includes(n-1)) return false;
+  return todayKey() > (store.dayDoneDate[n-1]||"");
+}
 function renderPlan(){
   const list=document.getElementById('plan-list');
   list.innerHTML=DAYS.map((day,di)=>{
     const n=di+1, unlocked=dayUnlocked(n), done=store.dayDone.includes(n);
     const ts=store.dayTasks[n]||[];
-    let status='', cls='';
+    const prevDone=store.dayDone.includes(n-1);
+    let status='', cls='', lockMsg='Önceki günü tamamlayınca açılır.';
     if(done){status='<span class="dstatus s-done">✓ tamam</span>';cls=' done';}
     else if(unlocked){status='<span class="dstatus s-open">açık</span>';}
+    else if(prevDone){status='<span class="dstatus s-lock">🔒 yarın</span>';cls=' locked';lockMsg='✅ Önceki günü bugün bitirdin. Bu gün <b>yarın</b> açılacak — bugünlük yeterli.';}
     else{status='<span class="dstatus s-lock">🔒 kilitli</span>';cls=' locked';}
     const tasks=day.tasks.map((t,ti)=>{
       const ck=ts[ti]?' checked':'';
@@ -569,7 +576,7 @@ function renderPlan(){
     }).join('');
     return `<div class="day${cls}">
       <div class="dhead"><span class="dnum">Gün ${n}</span><span class="dtheme">${day.theme}</span>${status}</div>
-      ${unlocked?tasks:'<div class="muted small" style="padding:8px 0">Önceki günü tamamlayınca açılır.</div>'}
+      ${unlocked?tasks:'<div class="muted small" style="padding:8px 0">'+lockMsg+'</div>'}
     </div>`;
   }).join('');
 }
@@ -579,8 +586,9 @@ function toggleTask(n,ti){
   store.dayTasks[n][ti]=!store.dayTasks[n][ti];
   const all=DAYS[n-1].tasks.every((_,i)=>store.dayTasks[n][i]);
   const was=store.dayDone.includes(n);
-  if(all && !was){store.dayDone.push(n); setTimeout(()=>alert("🎉 Gün "+n+" tamam! Gün "+(n+1<=DAYS.length?n+1:n)+" açıldı."),150);}
-  if(!all && was){store.dayDone=store.dayDone.filter(x=>x!==n);}
+  if(all && !was){store.dayDone.push(n); store.dayDoneDate[n]=todayKey();
+    setTimeout(()=>alert("🎉 Gün "+n+" tamamlandı! "+(n<DAYS.length?("Gün "+(n+1)+" yarın açılacak — bugünlük harikasın."):"Tüm günleri bitirdin!")),150);}
+  if(!all && was){store.dayDone=store.dayDone.filter(x=>x!==n); delete store.dayDoneDate[n];}
   save(); renderPlan();
 }
 
